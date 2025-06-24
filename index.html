@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ComfoWork Pod - Smart Space. Smarter Work.</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- GSAP (GreenSock Animation Platform) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.4/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.4/ScrollTrigger.min.js"></script>
+
+    <style>
+        /* Custom styles to complement Tailwind */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F8F7F4; /* A slightly warmer off-white */
+            color: #333;
+        }
+
+        /* Enhanced Color Palette */
+        .bg-brand-primary { background-color: #794a2f; } /* A deeper, richer brown */
+        .text-brand-primary { color: #794a2f; }
+        .bg-brand-secondary { background-color: #F8F7F4; }
+        .text-brand-secondary { color: #F8F7F4; }
+        .bg-brand-accent { background-color: #FDB813; } /* Vibrant yellow accent */
+        .text-brand-accent { color: #FDB813; }
+        .border-brand-accent { border-color: #FDB813; }
+
+        .btn {
+            @apply inline-block px-8 py-4 rounded-full font-bold shadow-lg transition-all duration-300 ease-in-out;
+        }
+
+        .btn-primary {
+            @apply bg-brand-primary text-white transform hover:scale-105 hover:bg-opacity-90;
+        }
+        
+        .btn-accent {
+            @apply bg-brand-accent text-brand-primary transform hover:scale-105 hover:bg-opacity-90;
+        }
+        
+        /* Glassmorphism effect for header */
+        .header-scrolled {
+            background-color: rgba(248, 247, 242, 0.8);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        /* For GSAP reveal animations */
+        .gsap-reveal-up {
+            opacity: 0;
+            transform: translateY(60px);
+        }
+        
+        /* Hide scrollbar for horizontal scroll section */
+        #gallery-container::-webkit-scrollbar {
+            display: none;
+        }
+        #gallery-container {
+            -ms-overflow-style: none; /* IE and Edge */
+            scrollbar-width: none; /* Firefox */
+        }
+        
+        /* Watermark style */
+        .watermark {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: rgba(0, 0, 0, 0.6);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            z-index: 1000;
+            pointer-events: none; /* Allows clicks to go "through" it */
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Floating Watermark -->
+    <div class="watermark">Work in Progress</div>
+
+    <!-- Header -->
+    <header id="header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <!-- Logo Placeholder -->
+            <a href="#" class="font-black text-2xl text-brand-primary">
+                <img src="your-comfowork-logo-dark.png" alt="ComfoWork Pod Logo" class="h-10 md:h-12 w-auto" onerror="this.style.display='none'; this.parentElement.innerHTML = 'ComfoWork';">
+            </a>
+
+            <!-- Desktop Navigation -->
+            <nav class="hidden lg:flex items-center space-x-10">
+                <a href="#features" class="text-gray-700 hover:text-brand-primary font-medium transition">Features</a>
+                <a href="#gallery" class="text-gray-700 hover:text-brand-primary font-medium transition">Gallery</a>
+                <a href="#testimonials" class="text-gray-700 hover:text-brand-primary font-medium transition">Testimonials</a>
+                <a href="#pricing" class="text-gray-700 hover:text-brand-primary font-medium transition">Pricing</a>
+            </nav>
+            
+            <a href="#pricing" class="hidden lg:block btn btn-accent">Order Now</a>
+
+            <!-- Mobile Menu Button -->
+            <button id="mobile-menu-button" class="lg:hidden text-brand-primary z-50">
+                <svg id="menu-open-icon" class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                <svg id="menu-close-icon" class="w-7 h-7 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="absolute top-0 left-0 w-full h-screen bg-brand-secondary transform -translate-x-full transition-transform duration-500 ease-in-out lg:hidden">
+            <div class="flex flex-col justify-center items-center h-full space-y-8">
+                <a href="#features" class="mobile-link text-3xl font-bold text-gray-700 hover:text-brand-primary">Features</a>
+                <a href="#gallery" class="mobile-link text-3xl font-bold text-gray-700 hover:text-brand-primary">Gallery</a>
+                <a href="#testimonials" class="mobile-link text-3xl font-bold text-gray-700 hover:text-brand-primary">Testimonials</a>
+                <a href="#pricing" class="mobile-link text-3xl font-bold text-gray-700 hover:text-brand-primary">Pricing</a>
+                <a href="#pricing" class="mt-8 btn btn-accent text-xl">Order Now</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="min-h-screen flex items-center bg-brand-secondary overflow-hidden">
+            <div class="container mx-auto px-6 pt-32 pb-16 lg:pt-20 lg:pb-10 relative">
+                <div class="absolute top-0 right-0 -mr-64 -mt-48 w-[800px] h-[800px] bg-yellow-200/40 rounded-full opacity-50 hero-bg-shape"></div>
+                <div class="absolute bottom-0 left-0 -ml-48 -mb-48 w-[600px] h-[600px] bg-stone-200/70 rounded-full opacity-50 hero-bg-shape"></div>
+
+                <div class="grid lg:grid-cols-2 gap-8 items-center relative z-10">
+                    <div class="text-center lg:text-left">
+                        <p id="hero-tagline" class="font-semibold text-brand-primary mb-2">BUILT FOR SMALL HOMES, BIG DREAMS</p>
+                        <h1 id="hero-title" class="text-5xl md:text-7xl font-black text-gray-800 leading-tight">Your Personal Productivity Pod.</h1>
+                        <p id="hero-subtitle" class="text-lg text-gray-600 mt-6 max-w-lg mx-auto lg:mx-0">Tired of the chaos? Reclaim your space and focus with the ComfoWork Pod – the elegant, wall-mounted desk that appears when you need it and vanishes when you don't.</p>
+                        <div id="hero-cta" class="mt-10">
+                            <a href="#pricing" class="btn btn-primary text-lg">Claim Your Space</a>
+                        </div>
+                    </div>
+                    <div id="hero-image-container" class="relative">
+                        <img src="https://placehold.co/800x800/E8E0D5/FFFFFF?text=Product+Image" alt="ComfoWork Pod" class="rounded-3xl shadow-2xl w-full h-auto">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section id="features" class="py-20 lg:py-32">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl md:text-5xl font-bold text-brand-primary gsap-reveal-up">Engineered for Your Workflow</h2>
+                    <p class="mt-4 text-lg text-gray-600 max-w-2xl mx-auto gsap-reveal-up">Every detail is designed to enhance your focus and comfort.</p>
+                </div>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Feature Cards -->
+                    <div class="bg-white p-8 rounded-2xl shadow-lg border border-gray-100 gsap-reveal-up">
+                        <h3 class="text-xl font-bold mb-2 text-brand-primary">Space-Saving Genius</h3>
+                        <p class="text-gray-600">Folds away to a slim profile, giving you back your valuable living space instantly.</p>
+                    </div>
+                    <div class="bg-white p-8 rounded-2xl shadow-lg border border-gray-100 gsap-reveal-up">
+                        <h3 class="text-xl font-bold mb-2 text-brand-primary">Sit or Stand</h3>
+                        <p class="text-gray-600">Adjustable height lets you switch between sitting and standing for ergonomic comfort.</p>
+                    </div>
+                    <div class="bg-white p-8 rounded-2xl shadow-lg border border-gray-100 gsap-reveal-up">
+                        <h3 class="text-xl font-bold mb-2 text-brand-primary">Clutter-Free Zone</h3>
+                        <p class="text-gray-600">Integrated storage and cable management keep your essentials organized and wires hidden.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Horizontal Gallery Section -->
+        <section id="gallery" class="py-20 lg:py-32 bg-brand-primary text-white overflow-hidden">
+            <div class="container mx-auto px-6 mb-12">
+                <h2 class="text-4xl md:text-5xl font-bold text-center">Fits Any Style, Any Space.</h2>
+            </div>
+            <div id="gallery-container" class="flex space-x-8 px-8">
+                <!-- Gallery items will be cloned in JS for infinite effect -->
+                <div class="gallery-item flex-shrink-0 w-80 md:w-96">
+                    <img src="https://placehold.co/600x800/333333/FFFFFF?text=Sleek+Black" alt="ComfoWork Pod in Black" class="w-full h-auto rounded-2xl shadow-2xl">
+                    <p class="mt-4 text-center font-bold text-xl">Sleek Black</p>
+                </div>
+                <div class="gallery-item flex-shrink-0 w-80 md:w-96">
+                    <img src="https://placehold.co/600x800/F8F7F4/333333?text=Elegant+White" alt="ComfoWork Pod in White" class="w-full h-auto rounded-2xl shadow-2xl">
+                    <p class="mt-4 text-center font-bold text-xl">Elegant White</p>
+                </div>
+                 <div class="gallery-item flex-shrink-0 w-80 md:w-96">
+                    <img src="https://placehold.co/600x800/D4C8BC/FFFFFF?text=Modern+Office" alt="ComfoWork Pod in a modern office" class="w-full h-auto rounded-2xl shadow-2xl">
+                    <p class="mt-4 text-center font-bold text-xl">The Home Office</p>
+                </div>
+                 <div class="gallery-item flex-shrink-0 w-80 md:w-96">
+                    <img src="https://placehold.co/600x800/C4A484/FFFFFF?text=Student+Dorm" alt="ComfoWork Pod in a student dorm" class="w-full h-auto rounded-2xl shadow-2xl">
+                    <p class="mt-4 text-center font-bold text-xl">The Study Nook</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonials Section -->
+        <section id="testimonials" class="py-20 lg:py-32 bg-brand-secondary">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl md:text-5xl font-bold text-brand-primary gsap-reveal-up">Loved by Professionals & Creatives</h2>
+                </div>
+                <div class="grid lg:grid-cols-3 gap-8">
+                    <div class="bg-white p-8 rounded-2xl shadow-lg border border-gray-100 gsap-reveal-up">
+                        <p class="text-gray-600 mb-6">"This completely changed my work-from-home life. My apartment feels twice as big now, and I'm so much more productive."</p>
+                        <div class="font-bold">- Aisha K., Freelance Writer</div>
+                    </div>
+                    <div class="bg-white p-8 rounded-2xl shadow-2xl border-4 border-brand-accent gsap-reveal-up">
+                        <p class="text-gray-600 mb-6">"As a student in a small hostel, this is a lifesaver. It’s my study desk, my project station, and it looks amazing. 10/10 would recommend!"</p>
+                        <div class="font-bold">- Bilal R., University Student</div>
+                    </div>
+                    <div class="bg-white p-8 rounded-2xl shadow-lg border border-gray-100 gsap-reveal-up">
+                        <p class="text-gray-600 mb-6">"The build quality is fantastic. It feels sturdy and the finish is premium. An Interwood product through and through."</p>
+                        <div class="font-bold">- Usman A., Remote Developer</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pricing Section -->
+        <section id="pricing" class="py-20 lg:py-32">
+            <div class="container mx-auto px-6 text-center">
+                 <h2 class="text-4xl md:text-5xl font-bold text-brand-primary gsap-reveal-up">Find Your Focus Today</h2>
+                 <p class="mt-4 text-lg text-gray-600 max-w-2xl mx-auto mb-12 gsap-reveal-up">One investment. Endless productivity.</p>
+
+                <div class="max-w-md mx-auto bg-white rounded-3xl shadow-2xl p-8 lg:p-12 border-t-8 border-brand-accent gsap-reveal-up">
+                    <h3 class="text-3xl font-bold text-brand-primary mb-2">ComfoWork Pod</h3>
+                    <p class="text-5xl font-black text-brand-primary mb-4">Rs. 10,999</p>
+                    <ul class="text-left space-y-4 text-gray-700 my-8">
+                        <li class="flex items-center"><svg class="w-6 h-6 text-green-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>Free Nationwide Delivery</li>
+                        <li class="flex items-center"><svg class="w-6 h-6 text-green-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>2-Year Structural Warranty</li>
+                        <li class="flex items-center"><svg class="w-6 h-6 text-green-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>All Mounting Hardware Included</li>
+                    </ul>
+                    <a href="#" class="btn btn-primary w-full text-xl">Order Now & Transform Your Space</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="bg-brand-primary text-brand-secondary">
+            <div class="container mx-auto px-6 py-16">
+                 <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-12">
+                    <div class="lg:col-span-2">
+                        <h3 class="text-2xl font-bold mb-4">ComfoWork Pod</h3>
+                        <p class="text-gray-300 max-w-sm">A revolutionary product by Interwood Furnitures, crafted with 50 years of trust and excellence.</p>
+                         <div class="mt-6">
+                            <!-- Interwood Logo Placeholder -->
+                            <img src="your-interwood-logo-light.png" alt="Interwood Logo" class="h-16 w-auto" onerror="this.style.display='none'; this.parentElement.innerHTML = '<div class=\'text-gray-300\'>From Interwood</div>';">
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold mb-4">Explore</h3>
+                        <ul class="space-y-3">
+                            <li><a href="#features" class="text-gray-300 hover:text-white transition">Features</a></li>
+                            <li><a href="#gallery" class="text-gray-300 hover:text-white transition">Gallery</a></li>
+                            <li><a href="#pricing" class="text-gray-300 hover:text-white transition">Pricing</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                         <h3 class="text-lg font-bold mb-4">Connect</h3>
+                         <ul class="space-y-3">
+                             <li><a href="#" class="text-gray-300 hover:text-white transition">Contact Us</a></li>
+                             <li><a href="#" class="text-gray-300 hover:text-white transition">About Interwood</a></li>
+                             <li><a href="#" class="text-gray-300 hover:text-white transition">FAQs</a></li>
+                         </ul>
+                    </div>
+                </div>
+                <div class="mt-12 pt-8 border-t border-white/10 text-center text-gray-400">
+                    <p>&copy; 2024 ComfoWork Pod by Interwood. All Rights Reserved.</p>
+                </div>
+            </div>
+        </footer>
+
+    </main>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            gsap.registerPlugin(ScrollTrigger);
+
+            // --- Mobile Menu ---
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const openIcon = document.getElementById('menu-open-icon');
+            const closeIcon = document.getElementById('menu-close-icon');
+            const mobileLinks = document.querySelectorAll('.mobile-link');
+            
+            function toggleMenu() {
+                mobileMenu.classList.toggle('-translate-x-full');
+                openIcon.classList.toggle('hidden');
+                closeIcon.classList.toggle('hidden');
+                document.body.classList.toggle('overflow-hidden');
+            }
+
+            mobileMenuButton.addEventListener('click', toggleMenu);
+            mobileLinks.forEach(link => link.addEventListener('click', toggleMenu));
+
+            // --- Header Scroll Effect ---
+            const header = document.getElementById('header');
+            ScrollTrigger.create({
+                start: 'top -80',
+                end: 99999,
+                toggleClass: { className: 'header-scrolled', target: header }
+            });
+
+            // --- HERO SECTION ANIMATIONS ---
+            const heroTl = gsap.timeline({delay: 0.2});
+            heroTl.from("#hero-tagline", { autoAlpha: 0, y: 20, duration: 0.8 })
+                  .from("#hero-title", { autoAlpha: 0, y: 20, duration: 1 }, "-=0.6")
+                  .from("#hero-subtitle", { autoAlpha: 0, y: 20, duration: 1 }, "-=0.7")
+                  .from("#hero-cta", { autoAlpha: 0, y: 20, duration: 1 }, "-=0.7")
+                  .from("#hero-image-container", { autoAlpha: 0, scale: 0.9, duration: 1.2 }, "-=1")
+                  .from(".hero-bg-shape", { autoAlpha: 0, scale: 0.5, stagger: 0.2, duration: 1.5 }, "-=1.2");
+
+            // --- GENERAL REVEAL ANIMATIONS ---
+            gsap.utils.toArray('.gsap-reveal-up').forEach(elem => {
+                gsap.fromTo(elem, 
+                    { autoAlpha: 0, y: 60 },
+                    {
+                        autoAlpha: 1,
+                        y: 0,
+                        duration: 1,
+                        ease: 'power3.out',
+                        scrollTrigger: {
+                            trigger: elem,
+                            start: 'top 85%',
+                            toggleActions: 'play none none none'
+                        }
+                    }
+                );
+            });
+
+            // --- HORIZONTAL GALLERY SCROLL ---
+            const gallery = document.getElementById("gallery-container");
+            const galleryItems = gsap.utils.toArray(".gallery-item");
+
+            // Clone items for a seamless loop effect
+            galleryItems.forEach(item => {
+                const clone = item.cloneNode(true);
+                gallery.appendChild(clone);
+            });
+
+            const totalWidth = gallery.scrollWidth / 2; // Since we cloned, width is doubled
+
+            gsap.to(gallery, {
+                x: -totalWidth,
+                ease: "none",
+                duration: 40, // Adjust duration for speed
+                repeat: -1, // Infinite loop
+                modifiers: {
+                    x: gsap.utils.unitize(x => parseFloat(x) % totalWidth)
+                }
+            });
+
+            // Pause on hover
+            gallery.addEventListener('mouseenter', () => gsap.to(gallery, {timeScale: 0.2}));
+            gallery.addEventListener('mouseleave', () => gsap.to(gallery, {timeScale: 1}));
+
+        });
+    </script>
+</body>
+</html>
